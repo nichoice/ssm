@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUser(int id) {
+    public boolean deleteUser(int id) {
         return userMapper.deleteUser(id);
     }
 

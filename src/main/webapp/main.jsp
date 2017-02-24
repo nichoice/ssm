@@ -1,5 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 <html>
 <head>
     <meta charset="utf-8">
@@ -8,18 +12,33 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
     <script type="text/javascript">
+        <!-- -->
         $(function () {
             var msg = "${msg}";
-            if (msg == "该用户存在！") {
+            if (msg == "该用户已存在！") {
                 alert(msg);
             }
         });
+
+        <!-- 删除用户 -->
+        function del(id){
+            $.get("<%=basePath%>/delete.do?id=" + id , function(data){
+                if("success" == data.result){
+                    alert("删除成功");
+                    window.location.reload(true);
+                }else{
+                    alert("删除失败");
+                }
+            });
+        }
     </script>
 </head>
 <body>
-<div>
+<div class="panel panel-heading">
+    <div style="float: right">
     当前用户： ${msg.username}
     <a href="/logout.do">退出</a>
+    </div>
 </div>
 
 <br/>
@@ -42,8 +61,8 @@
                     <input type="password" class="form-control" placeholder="用户密码" required name="password">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </form>
         </div>
@@ -62,13 +81,13 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${users}" var="c">
+            <c:forEach items="${users}" var="user">
                 <tr>
-                    <td>${c.id}</td>
-                    <td>${c.username}</td>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
                     <td>
-                        <a href="${c.id }/update">更新</a>
-                        <a href="javascript:;" onClick="del(${c.id});" name="id">删除</a>
+                        <a href="${c.id }/update">编辑</a>
+                        <a href="javascript:del('${user.id}')">删除</a>
                     </td>
                 </tr>
             </c:forEach>
@@ -76,12 +95,5 @@
         </table>
     </div>
 </div>
-<script type="text/javascript">
-    function del(id) {
-        if (confirm("你确定要删除这条记录吗？")) {
-            window.location = id + "/delete.do";
-        }
-    }
-</script>
 </body>
 </html>

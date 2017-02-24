@@ -32,7 +32,7 @@ public interface UserMapper {
      * @param id
      * @return
      */
-    public int deleteUser(int id);
+    public boolean deleteUser(int id);
 
     /**
      * 根据id查询用户信息

@@ -8,7 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +49,7 @@ public class UserController {
         try {
             userService.insertUser(username, password);
         }catch (Exception e){
-            model.addAttribute("msg" , "该用户存在！");
+            model.addAttribute("msg" , "该用户已存在！");
         }
         List<User> list = new ArrayList<User>();
         list = userService.selectAllUser();
@@ -59,11 +63,19 @@ public class UserController {
         return "main";
     }
 
-    @RequestMapping(value = "/{id}/delete.do")
-    public String deleteUser(int id) throws Exception{
-        System.out.println("delete: " + id);
-        userService.deleteUser(id);
-        return "main";
+    @RequestMapping(value = "/delete.do" )
+    public void deleteUser(int id , HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String result = "{\"result\":\"error\"}";
+        if(userService.deleteUser(id)){
+            result = "{\"result\":\"success\"}";
+        }
+        response.setContentType("application/json");
+        try {
+            PrintWriter out = response.getWriter();
+            out.write(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value = "/logout.do")
