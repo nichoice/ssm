@@ -1,6 +1,7 @@
 package com.efly.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Nic on 2017/1/23.
@@ -13,6 +14,7 @@ public class User implements Serializable {
     private int id;
     private String username;
     private String password;
+    private Date date;
 
     public User(){
         super();
@@ -23,10 +25,19 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(int id , String username , String password){
+    public User(int id , String username , String password , Date date){
         this.id = id;
         this.username = username;
         this.password = password;
+        this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getId() {
