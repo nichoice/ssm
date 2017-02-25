@@ -37,10 +37,10 @@ public class UserController {
             List<User> list = new ArrayList<User>();
             list = userService.selectAllUser();
             model.addAttribute("users" , list);
-            return "main";
+            return "index";
         } else{
             model.addAttribute("msg" , "用户名或者密码不对。");
-            return "index";
+            return "login";
         }
     }
 
@@ -54,7 +54,7 @@ public class UserController {
         List<User> list = new ArrayList<User>();
         list = userService.selectAllUser();
         model.addAttribute("users" , list);
-        return "main";
+        return "index";
     }
 
     @RequestMapping(value = "/{id}/update.do" , method = RequestMethod.POST)
@@ -81,6 +81,6 @@ public class UserController {
     @RequestMapping(value = "/logout.do")
     public String Logout(HttpSession session) throws Exception{
         session.invalidate();
-        return "index";
+        return "login";
     }
 }
